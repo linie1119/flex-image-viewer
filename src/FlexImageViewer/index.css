@@ -400,18 +400,18 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
   align-items: center;
 }
 
-.flex-image-viewer-actions li {
+.flex-image-viewer-actions .flex-image-viewer-action-item {
   list-style: none;
   padding: 0 var(--fiv-spacing-xl);
   height: var(--fiv-size-percent-control-height);
 }
 
-.flex-image-viewer-actions li .flex-image-viewer-icon {
+.flex-image-viewer-actions .flex-image-viewer-action-item .flex-image-viewer-icon {
   font-size: var(--fiv-size-icon-lg);
   cursor: pointer;
 }
 
-.flex-image-viewer-actions li .flex-image-viewer-icon:hover {
+.flex-image-viewer-actions .flex-image-viewer-action-item .flex-image-viewer-icon:hover {
   color: var(--fiv-color-text-inverse);
 }
 

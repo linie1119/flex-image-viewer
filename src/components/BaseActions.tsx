@@ -1,4 +1,6 @@
 import React, { useMemo } from "react";
+
+import ActionItem from "./ActionItem";
 import Slider from "rc-slider";
 import Tooltip from "rc-tooltip";
 
@@ -127,7 +129,7 @@ export default function BaseActions<
       {renderAction
         ? renderAction(actionElements, contextValues)
         : Object.keys(actionElements).map((key) => (
-            <li key={key}>{actionElements[key]}</li>
+            <ActionItem key={key}>{actionElements[key]}</ActionItem>
           ))}
     </ul>
   );
