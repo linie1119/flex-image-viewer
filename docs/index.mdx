@@ -1,0 +1,34 @@
+---
+overview: true
+title: Overview
+---
+
+# FlexImageViewer
+
+A React component for image viewer with mouse wheel zoom support.
+
+## Features
+
+- **Mouse Wheel Zoom**: Scroll the mouse wheel on the image area to zoom in/out
+- **Configurable Zoom Step**: Customize the zoom step via `wheelZoomStep` prop (default: 0.1)
+- **Zoom Toggle**: Enable/disable wheel zoom via `wheelZoom` prop (default: true)
+- **Scale Boundaries**: Automatically constrained between 10% and 800%
+
+## Basic Usage
+
+```tsx
+import { FlexImageViewer } from 'flex-image-viewer';
+
+<FlexImageViewer
+  files={[{ url: 'image.jpg', name: 'image.jpg' }]}
+  visible={true}
+  current={1}
+/>;
+```
+
+## Wheel Zoom Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `wheelZoom` | `boolean` | `true` | Enable mouse wheel zoom |
+| `wheelZoomStep` | `number` | `0.1` | Zoom step for each wheel event (e.g. 0.1 = 10%) |

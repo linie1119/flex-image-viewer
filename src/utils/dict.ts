@@ -1,0 +1,15 @@
+export const TOOLTIP_CONFIG: Record<string, string> = {
+  arrowLeft: '查看上一张图片',
+  arrowRight: '查看下一张图片',
+  clear: '重置图片',
+  close: '关闭',
+  thumbnail: '缩略图显示和隐藏',
+  info: '图片信息',
+  rotateLeft: '向左旋转图片',
+  rotateRight: '向右旋转图片',
+  zoomAdapt: '自适应缩放',
+  zoomSelect: '选择缩放比例',
+  zoomOut: '缩小图片',
+  zoomSlider: '缩放Slider',
+  zoomIn: '放大图片',
+};
