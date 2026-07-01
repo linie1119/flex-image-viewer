@@ -1,16 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
 
-import { DEFAULT_IMAGE } from "@/utils/source";
+import { DEFAULT_IMAGE } from '@/utils/source';
 
-import type { FileData } from "@/types";
+import type { FileData } from '@/types';
 
 export interface UseImageSourceResult {
   src: string;
   loading: boolean;
 }
-export function useImageSource(
-  file?: FileData,
-  getSrc?: (file: FileData) => Promise<string>,
+export function useImageSource<T extends FileData = FileData>(
+  file?: T,
+  getSrc?: (file: T) => Promise<string>
 ): UseImageSourceResult {
   const [src, setSrc] = useState(DEFAULT_IMAGE);
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,8 @@ export function useImageSource(
       let cancelled = false;
       setLoading(true);
 
-      getSrcRef.current(file)
+      getSrcRef
+        .current(file)
         .then((src) => {
           if (!cancelled && currentRequestId === requestIdRef.current) {
             setSrc(src);

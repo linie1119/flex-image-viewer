@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 
-import { useImageSource } from "@/hooks/useImageSource";
+import { useImageSource } from '@/hooks/useImageSource';
 
-import type { FileData } from "@/types";
+import type { FileData } from '@/types';
 
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 8;
 const DEFAULT_WHEEL_ZOOM_STEP = 0.1;
 
 export interface ImageProps<T extends FileData> {
-  file?: FileData;
+  file?: T;
   angle?: number;
   scale?: number;
   getSrc?: (file: T) => Promise<string>;
@@ -82,12 +82,10 @@ function Image<T extends FileData>(props: ImageProps<T>) {
       const imgWidth = img.naturalWidth;
       const imgHeight = img.naturalHeight;
 
-      if (!imgWidth || !imgHeight || !containerWidth || !containerHeight)
-        return;
+      if (!imgWidth || !imgHeight || !containerWidth || !containerHeight) return;
 
       const normalizedAngle = Math.abs(angle % 360);
-      const isRotated90Or270 =
-        normalizedAngle === 90 || normalizedAngle === 270;
+      const isRotated90Or270 = normalizedAngle === 90 || normalizedAngle === 270;
 
       const effectiveImgWidth = isRotated90Or270 ? imgHeight : imgWidth;
       const effectiveImgHeight = isRotated90Or270 ? imgWidth : imgHeight;
@@ -105,13 +103,13 @@ function Image<T extends FileData>(props: ImageProps<T>) {
     calculateScale();
 
     let resizeObserver: ResizeObserver | null = null;
-    if (container && typeof ResizeObserver !== "undefined") {
+    if (container && typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(calculateScale);
       resizeObserver.observe(container);
     }
 
     if (img) {
-      img.addEventListener("load", calculateScale);
+      img.addEventListener('load', calculateScale);
     }
 
     return () => {
@@ -119,7 +117,7 @@ function Image<T extends FileData>(props: ImageProps<T>) {
         resizeObserver.disconnect();
       }
       if (img) {
-        img.removeEventListener("load", calculateScale);
+        img.removeEventListener('load', calculateScale);
       }
     };
   }, [angle, src, isAdapt, oriScale, onAdapt]);
@@ -132,19 +130,16 @@ function Image<T extends FileData>(props: ImageProps<T>) {
       e.preventDefault();
       const delta = e.deltaY < 0 ? 1 : -1;
       const step = wheelZoomStepRef.current;
-      const nextScale = Math.max(
-        MIN_SCALE,
-        Math.min(MAX_SCALE, scaleRef.current + delta * step),
-      );
+      const nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scaleRef.current + delta * step));
       if (nextScale !== scaleRef.current) {
         setScale(nextScale);
         onWheelZoomRef.current?.(nextScale);
       }
     };
 
-    container.addEventListener("wheel", handleWheel, { passive: false });
+    container.addEventListener('wheel', handleWheel, { passive: false });
     return () => {
-      container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener('wheel', handleWheel);
     };
   }, [wheelZoom]);
 
@@ -159,11 +154,7 @@ function Image<T extends FileData>(props: ImageProps<T>) {
   };
 
   return (
-    <figure
-      ref={containerRef}
-      className="flex-image-viewer-container"
-      style={style}
-    >
+    <figure ref={containerRef} className="flex-image-viewer-container" style={style}>
       <img
         ref={internalImgRef}
         className="flex-image-viewer-image"
@@ -177,14 +168,9 @@ function Image<T extends FileData>(props: ImageProps<T>) {
         }}
       />
       {loading && <div className="flex-image-viewer-loading" />}
-      {hasError && (
-        <div
-          className="flex-image-viewer-error"
-          style={{ position: "absolute" }}
-        />
-      )}
+      {hasError && <div className="flex-image-viewer-error" style={{ position: 'absolute' }} />}
     </figure>
   );
-};
+}
 
 export default Image;
