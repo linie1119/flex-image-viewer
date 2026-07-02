@@ -9,11 +9,12 @@ export interface ContentProps<T> extends Pick<ImageProps<T>, 'getSrc'> {
   preload?: boolean;
   wheelZoom?: boolean;
   wheelZoomStep?: number;
+  disableRightClick?: boolean;
   onClose?: () => void;
 }
 
 function Content<T>(props: ContentProps<T>) {
-  const { preload = true, wheelZoom, wheelZoomStep, getSrc } = props;
+  const { preload = true, wheelZoom, wheelZoomStep, disableRightClick, getSrc } = props;
 
   const state = useViewerState();
   const dispatch = useViewerDispatch();
@@ -142,6 +143,7 @@ function Content<T>(props: ContentProps<T>) {
               onWheelZoom={handleWheelZoom}
               getSrc={getSrc}
               onOrientation={(orientation) => handleOrientation(displayIndex, orientation)}
+              disableRightClick={disableRightClick}
               style={{ display: isVisible ? 'flex' : 'none' }}
             />
           );

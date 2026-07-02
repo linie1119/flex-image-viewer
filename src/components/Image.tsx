@@ -19,6 +19,7 @@ export interface ImageProps<T extends FileData> {
   wheelZoomStep?: number;
   onWheelZoom?: (scale: number) => void;
   onOrientation?: (orientation: number) => void;
+  disableRightClick?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -34,6 +35,7 @@ function Image<T extends FileData>(props: ImageProps<T>) {
     wheelZoomStep = DEFAULT_WHEEL_ZOOM_STEP,
     onWheelZoom,
     onOrientation,
+    disableRightClick = false,
     style,
   } = props;
 
@@ -170,6 +172,11 @@ function Image<T extends FileData>(props: ImageProps<T>) {
         alt={file?.alt}
         onLoad={handleLoad}
         onError={handleError}
+        onContextMenu={(e) => {
+          if (disableRightClick) {
+            e.preventDefault();
+          }
+        }}
         style={{
           transform: `rotate(${angle}deg) scale(${scale})`,
           opacity: isLoaded && !hasError ? 1 : 0,

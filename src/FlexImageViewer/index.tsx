@@ -31,7 +31,7 @@ export interface FlexImageViewerProps<T extends FileData>
     InfoProps,
     Pick<ThumbnailImageProps<T>, 'getThumbnail'>,
     Pick<ImageProps<T>, 'getSrc'>,
-    Pick<ContentProps<T>, 'wheelZoom' | 'wheelZoomStep' | 'preload'> {
+    Pick<ContentProps<T>, 'wheelZoom' | 'wheelZoomStep' | 'preload' | 'disableRightClick'> {
   files?: T[];
   current?: number;
   loop?: boolean;
@@ -56,6 +56,7 @@ function FlexImageViewerInner<T extends FileData>({
   getSrc,
   getThumbnail,
   preload,
+  disableRightClick = false,
   ...rest
 }: FlexImageViewerProps<T>) {
   const state = useViewerState();
@@ -112,6 +113,7 @@ function FlexImageViewerInner<T extends FileData>({
             preload={preload}
             wheelZoom={wheelZoom}
             wheelZoomStep={wheelZoomStep}
+            disableRightClick={disableRightClick}
             getSrc={getSrc}
             onClose={handleClose}
           />

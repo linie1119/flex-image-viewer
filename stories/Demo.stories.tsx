@@ -9,6 +9,7 @@ interface DemoProps {
   preload?: boolean;
   srcDelay?: number;
   thumbnailDelay?: number;
+  disableRightClick?: boolean;
 }
 
 function generateFiles(count: number) {
@@ -38,6 +39,7 @@ const Demo = ({
   preload = false,
   srcDelay = 2000,
   thumbnailDelay = 2000,
+  disableRightClick = false,
 }: DemoProps) => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState(1);
@@ -59,6 +61,7 @@ const Demo = ({
         current={current}
         onIndexChange={setCurrent}
         preload={preload}
+        disableRightClick={disableRightClick}
         getSrc={async (file: FileData & { url: string; thumbnailUrl: string }) => {
           return new Promise((resolve) => setTimeout(() => resolve(file.url), srcDelay));
         }}
@@ -123,6 +126,7 @@ const meta = {
   argTypes: {
     fileCount: { control: { type: 'number', min: 1, max: 200 } },
     preload: { control: 'boolean' },
+    disableRightClick: { control: 'boolean' },
     srcDelay: { control: { type: 'number', min: 0, max: 10000, step: 500 } },
     thumbnailDelay: { control: { type: 'number', min: 0, max: 10000, step: 500 } },
   },
@@ -137,5 +141,15 @@ export const Primary: Story = {
     preload: false,
     srcDelay: 2000,
     thumbnailDelay: 2000,
+  },
+};
+
+export const DisableRightClick: Story = {
+  args: {
+    fileCount: 5,
+    preload: false,
+    srcDelay: 0,
+    thumbnailDelay: 0,
+    disableRightClick: true,
   },
 };
