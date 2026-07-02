@@ -2,6 +2,7 @@ interface InfoData {
   label: string;
   value: string;
 }
+
 export interface FileData {
   name?: string;
   description?: string;
@@ -42,9 +43,9 @@ export type ViewerAction =
   | { type: 'ZOOM_OUT'; payload: { index: number; step?: number } }
   | { type: 'ADAPT_ZOOM'; payload: { index: number; scale: number } }
   | {
-      type: 'CLEAR_IMAGE';
-      payload: { index: number; angle: number; scale: number };
-    }
+    type: 'CLEAR_IMAGE';
+    payload: { index: number; angle: number; scale: number };
+  }
   | { type: 'TOGGLE_INFO' }
   | { type: 'TOGGLE_THUMBNAIL' }
   | { type: 'SET_LOOP'; payload: boolean }

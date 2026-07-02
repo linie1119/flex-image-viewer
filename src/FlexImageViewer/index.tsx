@@ -1,44 +1,44 @@
-import React, { useEffect, useCallback } from "react";
-import { useDeepCompareEffect } from "ahooks";
+import React, { useEffect, useCallback } from 'react';
+import { useDeepCompareEffect } from 'ahooks';
 
-import {
-  ViewerProvider,
-  useViewerState,
-  useViewerDispatch,
-} from "@/context/ViewerContext";
-import { useImageOperations } from "@/hooks/useImageOperations";
-import Modal from "@/components/Modal";
-import Header from "./Header";
-import Content from "./Content";
-import Info from "./Info";
-import Thumbnail from "./Thumbnail";
-import Footer from "./Footer";
+import { ViewerProvider, useViewerState, useViewerDispatch } from '@/context/ViewerContext';
+import { useImageOperations } from '@/hooks/useImageOperations';
+import Modal from '@/components/Modal';
 
-import type { ImageProps, ModalProps } from "@/components";
-import type { FileData } from "@/types";
-import type { ThumbnailImageProps } from "@/components/ThumbnailIamge";
+import Header from './Header';
+import Content from './Content';
+import Info from './Info';
+import Thumbnail from './Thumbnail';
+import Footer from './Footer';
 
-import type { HeaderActionsProps } from "./Header/Actions";
-import type { FooterActionsProps } from "./Footer/Actions";
-import type { InfoProps } from "./Info";
-import type { ContentProps } from "./Content";
+import type { ImageProps, ModalProps } from '@/components';
+import type { FileData } from '@/types';
+import type { ThumbnailImageProps } from '@/components/ThumbnailIamge';
 
-import "rc-slider/assets/index.css";
-import "rc-tooltip/assets/bootstrap.css";
+import type { HeaderActionsProps } from './Header/Actions';
+import type { FooterActionsProps } from './Footer/Actions';
+import type { InfoProps } from './Info';
+import type { ContentProps } from './Content';
 
-import "./index.css";
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 
-export interface FlexImageViewerProps<T extends FileData> extends Omit<
-  ModalProps,
-  "children"
->, InfoProps, Pick<ThumbnailImageProps<T>, 'getThumbnail'>, Pick<ImageProps<T>, 'getSrc'>, Pick<ContentProps<T>, 'wheelZoom' | 'wheelZoomStep' | 'preload'> {
+import './index.css';
+
+export interface FlexImageViewerProps<T extends FileData>
+  extends
+    Omit<ModalProps, 'children'>,
+    InfoProps,
+    Pick<ThumbnailImageProps<T>, 'getThumbnail'>,
+    Pick<ImageProps<T>, 'getSrc'>,
+    Pick<ContentProps<T>, 'wheelZoom' | 'wheelZoomStep' | 'preload'> {
   files?: T[];
   current?: number;
   loop?: boolean;
   onClear?: () => void;
   onIndexChange?: (index: number) => void;
-  headerProps?: Pick<HeaderActionsProps<T>, "renderAction">;
-  footerProps?: Pick<FooterActionsProps<T>, "renderAction">;
+  headerProps?: Pick<HeaderActionsProps<T>, 'renderAction'>;
+  footerProps?: Pick<FooterActionsProps<T>, 'renderAction'>;
 }
 
 function FlexImageViewerInner<T extends FileData>({
@@ -66,7 +66,7 @@ function FlexImageViewerInner<T extends FileData>({
     if (current !== prevCurrentRef.current) {
       prevCurrentRef.current = current;
       if (current !== state.currentIndex) {
-        dispatch({ type: "SET_CURRENT_INDEX", payload: current });
+        dispatch({ type: 'SET_CURRENT_INDEX', payload: current });
       }
     }
   }, [current, state.currentIndex, dispatch]);
@@ -78,9 +78,9 @@ function FlexImageViewerInner<T extends FileData>({
   }, [state.currentIndex, current, onIndexChange]);
 
   useDeepCompareEffect(() => {
-    dispatch({ type: "SET_LOOP", payload: loop });
+    dispatch({ type: 'SET_LOOP', payload: loop });
     dispatch({
-      type: "INITIALIZE_FILES",
+      type: 'INITIALIZE_FILES',
       payload: { files: files ?? [] },
     });
   }, [files, loop]);
@@ -99,7 +99,7 @@ function FlexImageViewerInner<T extends FileData>({
   return (
     <Modal onClose={handleClose} {...rest}>
       <div
-        className={`flex-image-viewer ${state.thumbnailVisible ? "with-thumbnail" : ""} ${state.infoVisible ? "with-info" : ""}`}
+        className={`flex-image-viewer ${state.thumbnailVisible ? 'with-thumbnail' : ''} ${state.infoVisible ? 'with-info' : ''}`}
       >
         <Header<T>
           renderAction={headerProps?.renderAction}
@@ -131,10 +131,7 @@ function FlexImageViewer<T extends FileData>(props: FlexImageViewerProps<T>) {
   const { current = 1, files } = props;
 
   return (
-    <ViewerProvider
-      initialCurrent={current}
-      initialFilesLength={files?.length ?? 0}
-    >
+    <ViewerProvider initialCurrent={current} initialFilesLength={files?.length ?? 0}>
       <FlexImageViewerInner {...props} />
     </ViewerProvider>
   );

@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 
-import { Icon } from "@/components";
-import { min } from "es-toolkit/compat";
+import { min } from 'es-toolkit/compat';
+
+import { Icon } from '@/components';
 
 const MAX_SCALE = 800;
-const DEFAULT_PERCENT_OPTIONS = Array.from(
-  { length: 8 },
-  (_, i) => MAX_SCALE - i * 100,
-).concat([75, 50, 25, 10]);
+const DEFAULT_PERCENT_OPTIONS = Array.from({ length: 8 }, (_, i) => MAX_SCALE - i * 100).concat([
+  75, 50, 25, 10,
+]);
 const unit = MAX_SCALE / 100;
 
 export const getScaleValue = (sliderValue: number) => {
@@ -36,7 +36,7 @@ function PercentSelect({
   value = 100,
   onChange,
   disabled = false,
-  className = "",
+  className = '',
   style,
   options = DEFAULT_PERCENT_OPTIONS,
 }: PercentSelectProps) {
@@ -60,10 +60,7 @@ function PercentSelect({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target as Node)
-      ) {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         if (isEditing) {
           handleInputBlur();
@@ -71,8 +68,8 @@ function PercentSelect({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isEditing, inputValue, value]);
 
   const handleOptionClick = (optionValue: number) => {
@@ -85,7 +82,7 @@ function PercentSelect({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    if (val === "" || /^\d*\.?\d*$/.test(val)) {
+    if (val === '' || /^\d*\.?\d*$/.test(val)) {
       const num = min([parseFloat(val), MAX_SCALE]);
       setInputValue(num === undefined ? value.toString() : num.toString());
     }
@@ -94,7 +91,7 @@ function PercentSelect({
   const handleInputBlur = () => {
     const num = min([parseFloat(inputValue), MAX_SCALE]);
 
-    if (num === undefined || isNaN(num) || num <= 0 || inputValue === "") {
+    if (num === undefined || isNaN(num) || num <= 0 || inputValue === '') {
       setInputValue(value.toString());
     } else {
       if (num !== value) {
@@ -107,7 +104,7 @@ function PercentSelect({
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleInputBlur();
       inputRef.current?.blur();
     }
@@ -133,7 +130,7 @@ function PercentSelect({
   return (
     <div
       ref={selectRef}
-      className={`flex-image-viewer-percent-select ${isOpen ? "flex-image-viewer-percent-select-open" : ""} ${disabled ? "flex-image-viewer-percent-select-disabled" : ""} ${className}`}
+      className={`flex-image-viewer-percent-select ${isOpen ? 'flex-image-viewer-percent-select-open' : ''} ${disabled ? 'flex-image-viewer-percent-select-disabled' : ''} ${className}`}
       style={style}
     >
       <div className="flex-image-viewer-percent-select-control">
@@ -141,7 +138,7 @@ function PercentSelect({
           ref={inputRef}
           type="text"
           readOnly={!isEditing}
-          className={`flex-image-viewer-percent-select-input ${isEditing ? "flex-image-viewer-percent-select-input-editing" : ""}`}
+          className={`flex-image-viewer-percent-select-input ${isEditing ? 'flex-image-viewer-percent-select-input-editing' : ''}`}
           value={isEditing ? inputValue : value.toString()}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
@@ -152,13 +149,10 @@ function PercentSelect({
         />
         <span className="flex-image-viewer-percent-select-suffix">%</span>
         <div
-          className={`flex-image-viewer-percent-select-arrow ${isOpen ? "flex-image-viewer-percent-select-arrow-open" : ""}`}
+          className={`flex-image-viewer-percent-select-arrow ${isOpen ? 'flex-image-viewer-percent-select-arrow-open' : ''}`}
           onClick={handleToggle}
         >
-          <Icon
-            className="flex-image-viewer-percent-select-arrow-icon"
-            name="Down"
-          />
+          <Icon className="flex-image-viewer-percent-select-arrow-icon" name="Down" />
         </div>
       </div>
 
@@ -170,16 +164,13 @@ function PercentSelect({
               return (
                 <div
                   key={option.value}
-                  className={`flex-image-viewer-percent-select-option ${isSelected ? "flex-image-viewer-percent-select-option-selected" : ""}`}
+                  className={`flex-image-viewer-percent-select-option ${isSelected ? 'flex-image-viewer-percent-select-option-selected' : ''}`}
                   onClick={() => handleOptionClick(option.value)}
                 >
                   {option.label}
                   {isSelected && (
                     <span className="flex-image-viewer-percent-select-check">
-                      <Icon
-                        className="flex-image-viewer-percent-select-check-icon"
-                        name="Check"
-                      />
+                      <Icon className="flex-image-viewer-percent-select-check-icon" name="Check" />
                     </span>
                   )}
                 </div>

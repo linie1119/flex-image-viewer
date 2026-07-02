@@ -9,22 +9,6 @@ import { TOOLTIP_CONFIG } from '@/utils/dict';
 import ActionItem from './ActionItem';
 import { getScaleValue, getSliderValue } from './PercentSelect';
 
-const ARIA_LABEL_MAP: Record<string, string> = {
-  rotateLeft: '向左旋转图片',
-  rotateRight: '向右旋转图片',
-  clear: '重置图片',
-  close: '关闭查看器',
-  thumbnail: '显示或隐藏缩略图',
-  info: '显示或隐藏图片信息',
-  zoomAdapt: '自适应缩放',
-  zoomSelect: '选择缩放比例',
-  zoomOut: '缩小图片',
-  zoomSlider: '调整缩放比例',
-  zoomIn: '放大图片',
-  arrowLeft: '上一张图片',
-  arrowRight: '下一张图片',
-};
-
 export type ActionType = 'icon' | 'slider' | 'select';
 
 export interface BaseActionItem {
@@ -81,9 +65,7 @@ export default function BaseActions<C extends Record<string, unknown> = Record<s
           onAction(key, undefined, e);
         };
 
-        const ariaLabel = tooltipKey
-          ? ARIA_LABEL_MAP[tooltipKey] || TOOLTIP_CONFIG[tooltipKey] || tooltipKey
-          : key;
+        const ariaLabel = tooltipKey ? TOOLTIP_CONFIG[tooltipKey] || tooltipKey : key;
         content = (
           <Tooltip
             overlay={tooltipKey ? TOOLTIP_CONFIG[tooltipKey] : ''}
