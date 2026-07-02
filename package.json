@@ -68,6 +68,7 @@
   "dependencies": {
     "ahooks": "^3.9.7",
     "es-toolkit": "^1.46.0",
+    "exifreader": "^4.41.0",
     "rc-slider": "^11.1.9",
     "rc-tooltip": "^6.4.0"
   }

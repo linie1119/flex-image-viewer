@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import { useViewerState } from "@/context/ViewerContext";
+import { useViewerState } from '@/context/ViewerContext';
 
-import type { FileData } from "@/types";
+import type { FileData } from '@/types';
 
-import Actions from "./Actions";
+import Actions from './Actions';
 
-import type { HeaderActionsProps } from "./Actions";
+import type { HeaderActionsProps } from './Actions';
 
 export interface HeaderProps<T extends FileData> {
-  renderAction?: HeaderActionsProps<T>["renderAction"];
+  renderAction?: HeaderActionsProps<T>['renderAction'];
   onClose?: (e: React.MouseEvent) => void;
   onClear?: () => void;
-  updateCurrentFile?: HeaderActionsProps<T>["updateCurrentFile"];
+  updateCurrentFile?: HeaderActionsProps<T>['updateCurrentFile'];
 }
 
 function Header<T extends FileData>({

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useInViewport } from "ahooks";
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useInViewport } from 'ahooks';
 
-import { useViewerState, useViewerDispatch } from "@/context/ViewerContext";
+import { useViewerState, useViewerDispatch } from '@/context/ViewerContext';
 
-import ThumbnailIamge from "@/components/ThumbnailIamge";
+import ThumbnailIamge from '@/components/ThumbnailIamge';
 
-import type { ThumbnailImageProps } from "@/components/ThumbnailIamge";
-import type { FileData } from "@/types";
+import type { ThumbnailImageProps } from '@/components/ThumbnailIamge';
+import type { FileData } from '@/types';
 
 type ThumbnailProps<T extends FileData> = Pick<ThumbnailImageProps<T>, 'getThumbnail'>;
 
@@ -41,22 +41,14 @@ function ThumbnailItem<T extends FileData>(props: ThumbnailItemProps<T>) {
   return (
     <li
       ref={ref}
-      className={
-        currentIdx === idx ? "flex-image-viewer-thumbnail-active" : ""
-      }
+      className={currentIdx === idx ? 'flex-image-viewer-thumbnail-active' : ''}
       onClick={onClick}
       key={idx}
       aria-label={`缩略图 ${idx + 1}`}
       role="button"
       tabIndex={0}
     >
-      {rendered && (
-        <ThumbnailIamge<T>
-          file={file as T}
-          angle={angle}
-          getThumbnail={getThumbnail}
-        />
-      )}
+      {rendered && <ThumbnailIamge<T> file={file as T} angle={angle} getThumbnail={getThumbnail} />}
     </li>
   );
 }
@@ -88,9 +80,9 @@ export default function Thumbnail<T extends FileData>(props: ThumbnailProps<T>) 
     const targetElement = itemRefs.current.get(index);
     if (targetElement) {
       targetElement.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "nearest",
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest',
       });
     }
   }, [current, thumbnails]);
@@ -99,7 +91,7 @@ export default function Thumbnail<T extends FileData>(props: ThumbnailProps<T>) 
 
   return (
     <nav
-      className={`flex-image-viewer-thumbnail ${visible ? "visible" : ""}`}
+      className={`flex-image-viewer-thumbnail ${visible ? 'visible' : ''}`}
       aria-label="缩略图导航"
     >
       <div>
@@ -112,9 +104,7 @@ export default function Thumbnail<T extends FileData>(props: ThumbnailProps<T>) 
               currentIdx={index}
               angle={imageOptions?.[idx]?.angle}
               getThumbnail={getThumbnail}
-              onClick={() =>
-                dispatch({ type: "SET_CURRENT_INDEX", payload: idx + 1 })
-              }
+              onClick={() => dispatch({ type: 'SET_CURRENT_INDEX', payload: idx + 1 })}
               onRef={handleRef}
             />
           ))}

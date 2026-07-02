@@ -14,6 +14,7 @@ export interface FileData {
   angle?: number;
   scale?: number;
   infoData?: InfoData[];
+  orientation?: number;
 }
 
 interface ImageOperationState {

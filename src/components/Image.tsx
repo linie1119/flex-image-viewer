@@ -18,6 +18,7 @@ export interface ImageProps<T extends FileData> {
   wheelZoom?: boolean;
   wheelZoomStep?: number;
   onWheelZoom?: (scale: number) => void;
+  onOrientation?: (orientation: number) => void;
   style?: React.CSSProperties;
 }
 
@@ -32,6 +33,7 @@ function Image<T extends FileData>(props: ImageProps<T>) {
     wheelZoom = true,
     wheelZoomStep = DEFAULT_WHEEL_ZOOM_STEP,
     onWheelZoom,
+    onOrientation,
     style,
   } = props;
 
@@ -45,12 +47,18 @@ function Image<T extends FileData>(props: ImageProps<T>) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const { src, loading } = useImageSource(file, getSrc);
+  const { src, loading, orientation } = useImageSource(file, getSrc);
 
   useEffect(() => {
     setIsLoaded(false);
     setHasError(false);
   }, [src]);
+
+  useEffect(() => {
+    if (orientation !== undefined) {
+      onOrientation?.(orientation);
+    }
+  }, [orientation, onOrientation]);
 
   useEffect(() => {
     scaleRef.current = scale;

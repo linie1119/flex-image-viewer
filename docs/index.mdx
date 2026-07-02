@@ -19,16 +19,12 @@ A React component for image viewer with mouse wheel zoom support.
 ```tsx
 import { FlexImageViewer } from 'flex-image-viewer';
 
-<FlexImageViewer
-  files={[{ url: 'image.jpg', name: 'image.jpg' }]}
-  visible={true}
-  current={1}
-/>;
+<FlexImageViewer files={[{ url: 'image.jpg', name: 'image.jpg' }]} visible={true} current={1} />;
 ```
 
 ## Wheel Zoom Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `wheelZoom` | `boolean` | `true` | Enable mouse wheel zoom |
-| `wheelZoomStep` | `number` | `0.1` | Zoom step for each wheel event (e.g. 0.1 = 10%) |
+| Prop            | Type      | Default | Description                                     |
+| --------------- | --------- | ------- | ----------------------------------------------- |
+| `wheelZoom`     | `boolean` | `true`  | Enable mouse wheel zoom                         |
+| `wheelZoomStep` | `number`  | `0.1`   | Zoom step for each wheel event (e.g. 0.1 = 10%) |

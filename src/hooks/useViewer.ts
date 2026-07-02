@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { useImageOperations } from "./useImageOperations";
+import { useImageOperations } from './useImageOperations';
 
-import type { ViewerState, ViewerAction } from "@/types";
+import type { ViewerState, ViewerAction } from '@/types';
 
 export interface ViewerController {
   state: ViewerState;
@@ -11,38 +11,38 @@ export interface ViewerController {
   setCurrentIndex: (index: number) => void;
   toggleInfo: () => void;
   toggleThumbnail: () => void;
-  initializeFiles: (files: ViewerState["files"]) => void;
+  initializeFiles: (files: ViewerState['files']) => void;
 }
 
 export function useViewer(
   state: ViewerState,
-  dispatch: React.Dispatch<ViewerAction>,
+  dispatch: React.Dispatch<ViewerAction>
 ): ViewerController {
   const imageOps = useImageOperations(state, dispatch);
 
   const setCurrentIndex = useCallback(
     (index: number) => {
-      dispatch({ type: "SET_CURRENT_INDEX", payload: index });
+      dispatch({ type: 'SET_CURRENT_INDEX', payload: index });
     },
-    [dispatch],
+    [dispatch]
   );
 
   const toggleInfo = useCallback(() => {
-    dispatch({ type: "TOGGLE_INFO" });
+    dispatch({ type: 'TOGGLE_INFO' });
   }, [dispatch]);
 
   const toggleThumbnail = useCallback(() => {
-    dispatch({ type: "TOGGLE_THUMBNAIL" });
+    dispatch({ type: 'TOGGLE_THUMBNAIL' });
   }, [dispatch]);
 
   const initializeFiles = useCallback(
-    (files: ViewerState["files"]) => {
+    (files: ViewerState['files']) => {
       dispatch({
-        type: "INITIALIZE_FILES",
+        type: 'INITIALIZE_FILES',
         payload: { files },
       });
     },
-    [dispatch],
+    [dispatch]
   );
 
   return {

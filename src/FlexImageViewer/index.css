@@ -143,8 +143,7 @@ div.rc-tooltip-inner {
   position: relative;
   display: inline-block;
   font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .flex-image-viewer-percent-select-control {
@@ -293,8 +292,8 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
   z-index: 1;
 }
 
-.flex-image-viewer-content-tool-left>span,
-.flex-image-viewer-content-tool-right>span {
+.flex-image-viewer-content-tool-left > span,
+.flex-image-viewer-content-tool-right > span {
   width: var(--fiv-size-tool);
   height: var(--fiv-size-tool);
   border-radius: var(--fiv-border-radius-md);
@@ -305,13 +304,13 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
   align-items: center;
 }
 
-.flex-image-viewer-content-tool-left:hover>span,
-.flex-image-viewer-content-tool-right:hover>span {
+.flex-image-viewer-content-tool-left:hover > span,
+.flex-image-viewer-content-tool-right:hover > span {
   display: flex;
 }
 
-.flex-image-viewer-content-tool-left>span:hover,
-.flex-image-viewer-content-tool-right>span:hover {
+.flex-image-viewer-content-tool-left > span:hover,
+.flex-image-viewer-content-tool-right > span:hover {
   background-color: var(--fiv-color-bg-dark-hover);
 }
 
@@ -518,25 +517,25 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
   flex-wrap: nowrap;
 }
 
-.flex-image-viewer-thumbnail>div {
+.flex-image-viewer-thumbnail > div {
   overflow-x: auto;
   scroll-behavior: smooth;
 }
 
-.flex-image-viewer-thumbnail>div::-webkit-scrollbar {
+.flex-image-viewer-thumbnail > div::-webkit-scrollbar {
   height: var(--fiv-scrollbar-size);
 }
 
-.flex-image-viewer-thumbnail>div::-webkit-scrollbar-track {
+.flex-image-viewer-thumbnail > div::-webkit-scrollbar-track {
   background: var(--fiv-scrollbar-track);
 }
 
-.flex-image-viewer-thumbnail>div::-webkit-scrollbar-thumb {
+.flex-image-viewer-thumbnail > div::-webkit-scrollbar-thumb {
   background: var(--fiv-scrollbar-thumb);
   border-radius: var(--fiv-border-radius-sm);
 }
 
-.flex-image-viewer-thumbnail>div::-webkit-scrollbar-thumb:hover {
+.flex-image-viewer-thumbnail > div::-webkit-scrollbar-thumb:hover {
   background: var(--fiv-scrollbar-thumb-hover);
 }
 
@@ -587,7 +586,7 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
 }
 
 .flex-image-viewer-error::before {
-  content: "图片加载失败";
+  content: '图片加载失败';
 }
 
 .flex-image-viewer-loading {

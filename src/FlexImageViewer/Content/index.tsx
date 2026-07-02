@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 
-import { useViewerState, useViewerDispatch } from "@/context/ViewerContext";
-import { Icon, Image } from "@/components";
+import { useViewerState, useViewerDispatch } from '@/context/ViewerContext';
+import { Icon, Image } from '@/components';
 
-import type { ImageProps } from "@/components";
+import type { ImageProps } from '@/components';
 
 export interface ContentProps<T> extends Pick<ImageProps<T>, 'getSrc'> {
   preload?: boolean;
@@ -39,9 +39,7 @@ function Content<T>(props: ContentProps<T>) {
     } else {
       list = [index];
     }
-    const newIndices = list.filter(
-      (idx): idx is number => idx !== null,
-    );
+    const newIndices = list.filter((idx): idx is number => idx !== null);
 
     setDisplayIndices(newIndices);
   }, [current, files, preload]);
@@ -50,45 +48,55 @@ function Content<T>(props: ContentProps<T>) {
 
   const handleAdapt = useCallback(
     (zoom: number) => {
-      dispatch({ type: "ADAPT_ZOOM", payload: { index, scale: zoom } });
+      dispatch({ type: 'ADAPT_ZOOM', payload: { index, scale: zoom } });
     },
-    [dispatch, index],
+    [dispatch, index]
   );
 
   const handleWheelZoom = useCallback(
     (scale: number) => {
-      dispatch({ type: "SET_ZOOM", payload: { index, scale } });
+      dispatch({ type: 'SET_ZOOM', payload: { index, scale } });
     },
-    [dispatch, index],
+    [dispatch, index]
+  );
+
+  const handleOrientation = useCallback(
+    (displayIndex: number, orientation: number) => {
+      dispatch({
+        type: 'UPDATE_FILE',
+        payload: { index: displayIndex, file: { orientation } },
+      });
+    },
+    [dispatch]
   );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "ArrowLeft":
+        case 'ArrowLeft':
           e.preventDefault();
-          dispatch({ type: "PREV_IMAGE" });
+          dispatch({ type: 'PREV_IMAGE' });
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           e.preventDefault();
-          dispatch({ type: "NEXT_IMAGE" });
+          dispatch({ type: 'NEXT_IMAGE' });
           break;
-        case "+":
-        case "=":
+        case '+':
+        case '=':
           e.preventDefault();
-          dispatch({ type: "ZOOM_IN", payload: { index, step: 0.1 } });
+          dispatch({ type: 'ZOOM_IN', payload: { index, step: 0.1 } });
           break;
-        case "-":
+        case '-':
           e.preventDefault();
-          dispatch({ type: "ZOOM_OUT", payload: { index, step: 0.1 } });
+          dispatch({ type: 'ZOOM_OUT', payload: { index, step: 0.1 } });
           break;
-        case "r":
-        case "R":
+        case 'r':
+        case 'R':
           e.preventDefault();
           {
             const file = files[index];
             dispatch({
-              type: "CLEAR_IMAGE",
+              type: 'CLEAR_IMAGE',
               payload: {
                 index,
                 angle: file?.angle ?? 0,
@@ -100,9 +108,9 @@ function Content<T>(props: ContentProps<T>) {
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [dispatch, index, files]);
 
@@ -110,7 +118,7 @@ function Content<T>(props: ContentProps<T>) {
     <main className="flex-image-viewer-content" aria-label="图片内容">
       <div className="flex-image-viewer-content-tool-left">
         <span
-          onClick={() => dispatch({ type: "PREV_IMAGE" })}
+          onClick={() => dispatch({ type: 'PREV_IMAGE' })}
           aria-label="上一张图片"
           role="button"
           tabIndex={0}
@@ -133,14 +141,15 @@ function Content<T>(props: ContentProps<T>) {
               wheelZoomStep={wheelZoomStep}
               onWheelZoom={handleWheelZoom}
               getSrc={getSrc}
-              style={{ display: isVisible ? "flex" : "none" }}
+              onOrientation={(orientation) => handleOrientation(displayIndex, orientation)}
+              style={{ display: isVisible ? 'flex' : 'none' }}
             />
           );
         })}
       </div>
       <div className="flex-image-viewer-content-tool-right">
         <span
-          onClick={() => dispatch({ type: "NEXT_IMAGE" })}
+          onClick={() => dispatch({ type: 'NEXT_IMAGE' })}
           aria-label="下一张图片"
           role="button"
           tabIndex={0}

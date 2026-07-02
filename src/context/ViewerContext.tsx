@@ -1,19 +1,18 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer } from 'react';
 
-import type { ViewerState, ViewerAction } from "@/types";
+import type { ViewerState, ViewerAction } from '@/types';
 
 const ZOOM_STEP = 0.1;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 8;
 
 export const ViewerStateContext = createContext<ViewerState | null>(null);
-export const ViewerDispatchContext =
-  createContext<React.Dispatch<ViewerAction> | null>(null);
+export const ViewerDispatchContext = createContext<React.Dispatch<ViewerAction> | null>(null);
 
 export function useViewerState(): ViewerState {
   const context = useContext(ViewerStateContext);
   if (!context) {
-    throw new Error("useViewerState must be used within a ViewerProvider");
+    throw new Error('useViewerState must be used within a ViewerProvider');
   }
   return context;
 }
@@ -21,19 +20,16 @@ export function useViewerState(): ViewerState {
 export function useViewerDispatch(): React.Dispatch<ViewerAction> {
   const context = useContext(ViewerDispatchContext);
   if (!context) {
-    throw new Error("useViewerDispatch must be used within a ViewerProvider");
+    throw new Error('useViewerDispatch must be used within a ViewerProvider');
   }
   return context;
 }
 
-export function viewerReducer(
-  state: ViewerState,
-  action: ViewerAction,
-): ViewerState {
+export function viewerReducer(state: ViewerState, action: ViewerAction): ViewerState {
   switch (action.type) {
-    case "SET_CURRENT_INDEX":
+    case 'SET_CURRENT_INDEX':
       return { ...state, currentIndex: action.payload };
-    case "PREV_IMAGE": {
+    case 'PREV_IMAGE': {
       const total = state.filesLength;
       if (total <= 1) return state;
       let index = state.currentIndex - 1;
@@ -44,7 +40,7 @@ export function viewerReducer(
       }
       return { ...state, currentIndex: index };
     }
-    case "NEXT_IMAGE": {
+    case 'NEXT_IMAGE': {
       const total = state.filesLength;
       if (total <= 1) return state;
       let index = state.currentIndex + 1;
@@ -55,30 +51,30 @@ export function viewerReducer(
       }
       return { ...state, currentIndex: index };
     }
-    case "SET_LOOP":
+    case 'SET_LOOP':
       return { ...state, loop: action.payload };
-    case "ROTATE_LEFT": {
+    case 'ROTATE_LEFT': {
       const { index } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle: (opt.angle - 90 + 360) % 360 } : opt,
+        i === index ? { ...opt, angle: (opt.angle - 90 + 360) % 360 } : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "ROTATE_RIGHT": {
+    case 'ROTATE_RIGHT': {
       const { index } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle: (opt.angle + 90) % 360 } : opt,
+        i === index ? { ...opt, angle: (opt.angle + 90) % 360 } : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "SET_ZOOM": {
+    case 'SET_ZOOM': {
       const { index, scale } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, scale, isAdapt: false } : opt,
+        i === index ? { ...opt, scale, isAdapt: false } : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "ZOOM_IN": {
+    case 'ZOOM_IN': {
       const { index, step = ZOOM_STEP } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
         i === index
@@ -87,11 +83,11 @@ export function viewerReducer(
               scale: Math.min(MAX_SCALE, opt.scale + step),
               isAdapt: false,
             }
-          : opt,
+          : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "ZOOM_OUT": {
+    case 'ZOOM_OUT': {
       const { index, step = ZOOM_STEP } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
         i === index
@@ -100,29 +96,29 @@ export function viewerReducer(
               scale: Math.max(MIN_SCALE, opt.scale - step),
               isAdapt: false,
             }
-          : opt,
+          : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "ADAPT_ZOOM": {
+    case 'ADAPT_ZOOM': {
       const { index, scale } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, scale, isAdapt: true } : opt,
+        i === index ? { ...opt, scale, isAdapt: true } : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "CLEAR_IMAGE": {
+    case 'CLEAR_IMAGE': {
       const { index, angle, scale } = action.payload;
       const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle, scale, isAdapt: true } : opt,
+        i === index ? { ...opt, angle, scale, isAdapt: true } : opt
       );
       return { ...state, imageOptions: newOptions };
     }
-    case "TOGGLE_INFO":
+    case 'TOGGLE_INFO':
       return { ...state, infoVisible: !state.infoVisible };
-    case "TOGGLE_THUMBNAIL":
+    case 'TOGGLE_THUMBNAIL':
       return { ...state, thumbnailVisible: !state.thumbnailVisible };
-    case "INITIALIZE_FILES": {
+    case 'INITIALIZE_FILES': {
       const { files } = action.payload;
       const count = files.length;
       return {
@@ -136,11 +132,9 @@ export function viewerReducer(
         })),
       };
     }
-    case "UPDATE_FILE": {
+    case 'UPDATE_FILE': {
       const { index, file } = action.payload;
-      const newFiles = state.files.map((f, i) =>
-        i === index ? { ...f, ...file } : f,
-      );
+      const newFiles = state.files.map((f, i) => (i === index ? { ...f, ...file } : f));
       return { ...state, files: newFiles };
     }
     default:
@@ -148,10 +142,7 @@ export function viewerReducer(
   }
 }
 
-function createInitialState(
-  initialCurrent = 1,
-  initialFilesLength = 0,
-): ViewerState {
+function createInitialState(initialCurrent = 1, initialFilesLength = 0): ViewerState {
   return {
     currentIndex: initialCurrent,
     filesLength: initialFilesLength,
@@ -176,14 +167,12 @@ export function ViewerProvider({
 }: ViewerProviderProps) {
   const [state, dispatch] = useReducer(
     viewerReducer,
-    createInitialState(initialCurrent, initialFilesLength),
+    createInitialState(initialCurrent, initialFilesLength)
   );
 
   return (
     <ViewerStateContext.Provider value={state}>
-      <ViewerDispatchContext.Provider value={dispatch}>
-        {children}
-      </ViewerDispatchContext.Provider>
+      <ViewerDispatchContext.Provider value={dispatch}>{children}</ViewerDispatchContext.Provider>
     </ViewerStateContext.Provider>
   );
 }

@@ -1,8 +1,8 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from 'react';
 
-import { useImageSource } from "@/hooks/useImageSource";
+import { useImageSource } from '@/hooks/useImageSource';
 
-import type { FileData } from "@/types";
+import type { FileData } from '@/types';
 
 export interface ThumbnailImageProps<T extends FileData> {
   file?: T;
@@ -34,12 +34,10 @@ function ThumbnailImage<T extends FileData>(props: ThumbnailImageProps<T>) {
       const imgWidth = img.naturalWidth || img.width;
       const imgHeight = img.naturalHeight || img.height;
 
-      if (!imgWidth || !imgHeight || !containerWidth || !containerHeight)
-        return;
+      if (!imgWidth || !imgHeight || !containerWidth || !containerHeight) return;
 
       const normalizedAngle = Math.abs(angle % 360);
-      const isRotated90Or270 =
-        normalizedAngle === 90 || normalizedAngle === 270;
+      const isRotated90Or270 = normalizedAngle === 90 || normalizedAngle === 270;
 
       const effectiveImgWidth = isRotated90Or270 ? imgHeight : imgWidth;
       const effectiveImgHeight = isRotated90Or270 ? imgWidth : imgHeight;
@@ -55,10 +53,10 @@ function ThumbnailImage<T extends FileData>(props: ThumbnailImageProps<T>) {
 
     calculateScale();
 
-    img.addEventListener("load", calculateScale);
+    img.addEventListener('load', calculateScale);
 
     return () => {
-      img.removeEventListener("load", calculateScale);
+      img.removeEventListener('load', calculateScale);
     };
   }, [angle, src]);
 
@@ -82,6 +80,6 @@ function ThumbnailImage<T extends FileData>(props: ThumbnailImageProps<T>) {
       {loading && <div className="flex-image-viewer-loading" />}
     </div>
   );
-};
+}
 
 export default ThumbnailImage;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface ActionItemProps {
   onClick?: () => void;
@@ -6,10 +6,9 @@ export interface ActionItemProps {
 }
 
 export default function ActionItem({ children, onClick }: ActionItemProps) {
-  return <li
-    className="flex-image-viewer-action-item"
-    onClick={onClick}
-  >
-    {children}
-  </li>;
+  return (
+    <li className="flex-image-viewer-action-item" onClick={onClick}>
+      {children}
+    </li>
+  );
 }
