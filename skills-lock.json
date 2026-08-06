@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "rslib-best-practices": {
+      "source": "rstackjs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "e51d235161c84260ed8987c508ddcb600f4dc31e8204e03853b524939f66c747"
+    },
+    "rspress-custom-theme": {
+      "source": "rstackjs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "70281973357233155f6dfb6289d5876ecad35bb858de41d505cdb0b175a47932"
+    },
+    "rspress-description-generator": {
+      "source": "rstackjs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "4512b22952da93042ef12432282fecd4709d2d2337463e097a1ba6f7adc27bc8"
+    },
+    "rstest-best-practices": {
+      "source": "rstackjs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "048479cd20e670cad5363f91dc9782bf6deb03313ca6eabbdeaebca5984d38b1"
+    }
+  }
+}

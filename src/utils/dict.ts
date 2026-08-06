@@ -1,0 +1,30 @@
+export type TooltipKey =
+  | 'arrowLeft'
+  | 'arrowRight'
+  | 'clear'
+  | 'close'
+  | 'thumbnail'
+  | 'info'
+  | 'rotateLeft'
+  | 'rotateRight'
+  | 'zoomAdapt'
+  | 'zoomSelect'
+  | 'zoomOut'
+  | 'zoomSlider'
+  | 'zoomIn';
+
+export const TOOLTIP_CONFIG: Record<TooltipKey, string> = {
+  arrowLeft: '查看上一张图片',
+  arrowRight: '查看下一张图片',
+  clear: '重置图片',
+  close: '关闭',
+  thumbnail: '显示或隐藏缩略图',
+  info: '显示或隐藏图片信息',
+  rotateLeft: '向左旋转图片',
+  rotateRight: '向右旋转图片',
+  zoomAdapt: '自适应缩放',
+  zoomSelect: '选择缩放比例',
+  zoomOut: '缩小图片',
+  zoomSlider: '调整缩放比例',
+  zoomIn: '放大图片',
+};

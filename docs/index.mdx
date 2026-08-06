@@ -1,0 +1,38 @@
+---
+overview: true
+title: Overview
+---
+
+# FlexImageViewer
+
+A React component for image viewer with mouse wheel zoom and drag pan support.
+
+## Features
+
+- **Mouse Wheel Zoom**: Scroll the mouse wheel on the image area to zoom in/out
+- **Drag Pan**: Hold the left mouse button and drag to pan the image when zoomed in
+- **Configurable Zoom Step**: Customize the zoom step via `wheelZoomStep` prop (default: 0.1)
+- **Zoom Toggle**: Enable/disable wheel zoom via `wheelZoom` prop (default: true)
+- **Drag Pan Toggle**: Enable/disable drag pan via `dragPan` prop (default: true)
+- **Scale Boundaries**: Automatically constrained between 10% and 800%
+
+## Basic Usage
+
+```tsx
+import { FlexImageViewer } from 'flex-image-viewer';
+
+<FlexImageViewer files={[{ url: 'image.jpg', name: 'image.jpg' }]} visible={true} current={1} />;
+```
+
+## Wheel Zoom Props
+
+| Prop            | Type      | Default | Description                                     |
+| --------------- | --------- | ------- | ----------------------------------------------- |
+| `wheelZoom`     | `boolean` | `true`  | Enable mouse wheel zoom                         |
+| `wheelZoomStep` | `number`  | `0.1`   | Zoom step for each wheel event (e.g. 0.1 = 10%) |
+
+## Drag Pan Props
+
+| Prop      | Type      | Default | Description                                               |
+| --------- | --------- | ------- | --------------------------------------------------------- |
+| `dragPan` | `boolean` | `true`  | Enable drag pan to move the image when zoomed beyond view |
