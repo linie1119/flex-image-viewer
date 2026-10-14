@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import { useImageSource } from '@/hooks/useImageSource';
-import { useViewerState } from '@/context/ViewerContext';
 import { DEFAULT_WHEEL_ZOOM_STEP, MIN_SCALE, MAX_SCALE } from '@/utils/constant';
 
 import type { FileData, ResolveFile } from '@/types';
@@ -22,6 +21,7 @@ export interface ImageProps<T extends FileData, U = unknown> {
   onOrientation?: (orientation: number) => void;
   resolveFile?: ResolveFile<T, U>;
   onMetaResolved?: (meta: Partial<T>) => void;
+  refreshKey?: number;
 }
 
 function Image<T extends FileData, U = unknown>(props: ImageProps<T, U>) {
@@ -41,6 +41,7 @@ function Image<T extends FileData, U = unknown>(props: ImageProps<T, U>) {
     onOrientation,
     resolveFile,
     onMetaResolved,
+    refreshKey,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,7 +69,6 @@ function Image<T extends FileData, U = unknown>(props: ImageProps<T, U>) {
   const translateXRef = useRef(0);
   const translateYRef = useRef(0);
 
-  const refreshKey = useViewerState().refreshKeys?.[index];
   const { src, loading, orientation } = useImageSource<T, U>(
     file,
     index,

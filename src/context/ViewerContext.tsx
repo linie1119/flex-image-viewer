@@ -58,73 +58,85 @@ export function viewerReducer<T extends FileData>(
       return { ...state, loop: action.payload };
     case 'ROTATE_LEFT': {
       const { index } = action.payload;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle: (opt.angle - 90 + 360) % 360 } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, angle: (opt.angle - 90 + 360) % 360 };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'ROTATE_RIGHT': {
       const { index } = action.payload;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle: (opt.angle + 90) % 360 } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, angle: (opt.angle + 90) % 360 };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'SET_ROTATION': {
       const { index, angle } = action.payload;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle: angle % 360 } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, angle: angle % 360 };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'SET_ZOOM': {
       const { index, scale } = action.payload;
       const roundedScale = Math.round(scale * 100) / 100;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, scale: roundedScale, isAdapt: false } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, scale: roundedScale, isAdapt: false };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'ZOOM_IN': {
       const { index, step = ZOOM_STEP } = action.payload;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index
-          ? {
-              ...opt,
-              scale: Math.round(Math.min(MAX_SCALE, opt.scale + step) * 100) / 100,
-              isAdapt: false,
-            }
-          : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = {
+          ...opt,
+          scale: Math.round(Math.min(MAX_SCALE, opt.scale + step) * 100) / 100,
+          isAdapt: false,
+        };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'ZOOM_OUT': {
       const { index, step = ZOOM_STEP } = action.payload;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index
-          ? {
-              ...opt,
-              scale: Math.round(Math.max(MIN_SCALE, opt.scale - step) * 100) / 100,
-              isAdapt: false,
-            }
-          : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = {
+          ...opt,
+          scale: Math.round(Math.max(MIN_SCALE, opt.scale - step) * 100) / 100,
+          isAdapt: false,
+        };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'ADAPT_ZOOM': {
       const { index, scale } = action.payload;
       const roundedScale = Math.round(scale * 100) / 100;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, scale: roundedScale, isAdapt: true } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, scale: roundedScale, isAdapt: true };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'CLEAR_IMAGE': {
       const { index, angle, scale } = action.payload;
       const roundedScale = Math.round(scale * 100) / 100;
-      const newOptions = state.imageOptions.map((opt, i) =>
-        i === index ? { ...opt, angle, scale: roundedScale, isAdapt: true } : opt
-      );
+      const newOptions = [...state.imageOptions];
+      const opt = newOptions[index];
+      if (opt) {
+        newOptions[index] = { ...opt, angle, scale: roundedScale, isAdapt: true };
+      }
       return { ...state, imageOptions: newOptions };
     }
     case 'TOGGLE_INFO':

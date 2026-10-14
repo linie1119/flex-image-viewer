@@ -253,7 +253,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    fileCount: 50,
+    fileCount: 4000,
     preload: false,
     srcDelay: 2000,
     thumbnailDelay: 2000,

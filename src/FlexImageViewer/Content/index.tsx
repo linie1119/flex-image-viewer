@@ -35,6 +35,7 @@ function Content<T extends FileData, U = unknown>(props: ContentProps<T, U>) {
   const current = state.currentIndex;
   const files = state.files;
   const imageOptions = state.imageOptions;
+  const refreshKeys = state.refreshKeys;
 
   const [displayIndices, setDisplayIndices] = useState<number[]>([]);
 
@@ -166,6 +167,7 @@ function Content<T extends FileData, U = unknown>(props: ContentProps<T, U>) {
               onOrientation={(orientation) => handleOrientation(displayIndex, orientation)}
               onMetaResolved={(meta) => handleMetaResolved(displayIndex, meta)}
               disableRightClick={disableRightClick}
+              refreshKey={refreshKeys?.[displayIndex]}
               style={{ display: isVisible ? 'flex' : 'none' }}
             />
           );
