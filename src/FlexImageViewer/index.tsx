@@ -1,6 +1,5 @@
 import React, { useEffect, useImperativeHandle } from 'react';
 import { useDeepCompareEffect, useMemoizedFn } from 'ahooks';
-import { omit } from 'es-toolkit';
 
 import Modal from '@/components/Modal';
 import { ViewerProvider, useViewerState, useViewerDispatch } from '@/context/ViewerContext';
@@ -8,7 +7,7 @@ import { useImageOperations } from '@/hooks/useImageOperations';
 
 import type { ModalProps } from '@/components';
 import type { FileData, ImageOperationState, ThumbnailViewportChangeCallback } from '@/types';
-import type { ThumbnailImageProps } from '@/components/ThumbnailIamge';
+import type { ThumbnailImageProps } from '@/components/ThumbnailImage';
 
 import Header from './Header';
 import Content from './Content';
@@ -26,13 +25,7 @@ import 'rc-tooltip/assets/bootstrap.css';
 
 import './index.css';
 
-interface FlexImageViewerInnerType {
-  <T extends FileData, U = unknown>(
-    props: FlexImageViewerProps<T, U> & { ref?: React.Ref<FlexImageViewerRef<T>> }
-  ): React.ReactElement;
-}
-
-interface FlexImageViewerType {
+interface FlexImageViewerComponentType {
   <T extends FileData, U = unknown>(
     props: FlexImageViewerProps<T, U> & { ref?: React.Ref<FlexImageViewerRef<T>> }
   ): React.ReactElement;
@@ -215,7 +208,7 @@ const FlexImageViewerInner = React.forwardRef(function FlexImageViewerInner<
       />
     </div>
   );
-}) as unknown as FlexImageViewerInnerType;
+}) as unknown as FlexImageViewerComponentType;
 
 const FlexImageViewer = React.forwardRef(function FlexImageViewer<T extends FileData>(
   props: FlexImageViewerProps<T>,
@@ -224,7 +217,12 @@ const FlexImageViewer = React.forwardRef(function FlexImageViewer<T extends File
   const { current = 0, files, infoVisible = false, thumbnailVisible = false, onClose } = props;
 
   return (
-    <Modal onClose={onClose} {...omit(props, ['infoVisible'])}>
+    <Modal
+      visible={props.visible}
+      getContainer={props.getContainer}
+      destroyOnClose={props.destroyOnClose}
+      onClose={onClose}
+    >
       <ViewerProvider
         initialCurrent={current}
         initialFilesLength={files?.length ?? 0}
@@ -235,6 +233,6 @@ const FlexImageViewer = React.forwardRef(function FlexImageViewer<T extends File
       </ViewerProvider>
     </Modal>
   );
-}) as unknown as FlexImageViewerType;
+}) as unknown as FlexImageViewerComponentType;
 
 export default FlexImageViewer;

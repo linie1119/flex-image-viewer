@@ -206,7 +206,7 @@ export function viewerReducer<T extends FileData>(
   }
 }
 
-function createInitialState<T extends FileData>(
+export function createInitialState<T extends FileData>(
   initialCurrent = 0,
   initialFilesLength = 0,
   initialThumbnailVisible = false,

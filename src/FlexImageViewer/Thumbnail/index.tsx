@@ -3,9 +3,9 @@ import { useMemoizedFn } from 'ahooks';
 
 import { useViewerState, useViewerDispatch } from '@/context/ViewerContext';
 
-import ThumbnailIamge from '@/components/ThumbnailIamge';
+import ThumbnailImage from '@/components/ThumbnailImage';
 
-import type { ThumbnailImageProps } from '@/components/ThumbnailIamge';
+import type { ThumbnailImageProps } from '@/components/ThumbnailImage';
 import type { FileData, ResolveFile, ThumbnailViewportChangeCallback } from '@/types';
 
 type ThumbnailProps<T extends FileData, U = unknown> = Pick<
@@ -47,7 +47,7 @@ function ThumbnailItem<T extends FileData, U = unknown>(props: ThumbnailItemProp
       role="button"
       tabIndex={0}
     >
-      <ThumbnailIamge<T, U> file={file as T} index={idx} angle={angle} resolveFile={resolveFile} />
+      <ThumbnailImage<T, U> file={file as T} index={idx} angle={angle} resolveFile={resolveFile} />
     </li>
   );
 }
@@ -121,10 +121,7 @@ function Thumbnail<T extends FileData, U = unknown>(props: ThumbnailProps<T, U>)
       if (!div) return;
       const targetScrollLeft =
         current * THUMBNAIL_ITEM_WIDTH - div.clientWidth / 2 + THUMBNAIL_ITEM_WIDTH / 2;
-      const maxScrollLeft = Math.max(
-        0,
-        thumbnails.length * THUMBNAIL_ITEM_WIDTH - div.clientWidth
-      );
+      const maxScrollLeft = Math.max(0, thumbnails.length * THUMBNAIL_ITEM_WIDTH - div.clientWidth);
       // 临时禁用 CSS smooth scroll，避免虚拟列表重新计算时动画被中断
       const originalBehavior = div.style.scrollBehavior;
       div.style.scrollBehavior = 'auto';

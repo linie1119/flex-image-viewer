@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { useMemoizedFn } from 'ahooks';
 
 export interface ModalProps {
@@ -156,5 +156,5 @@ export default function Modal(props: ModalProps) {
     </div>
   );
 
-  return ReactDOM.createPortal(modalContent, targetElement);
+  return createPortal(modalContent, targetElement);
 }

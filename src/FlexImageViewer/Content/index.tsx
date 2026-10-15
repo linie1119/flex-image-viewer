@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 
 import { useViewerState, useViewerDispatch } from '@/context/ViewerContext';
@@ -38,6 +38,11 @@ function Content<T extends FileData, U = unknown>(props: ContentProps<T, U>) {
   const refreshKeys = state.refreshKeys;
 
   const [displayIndices, setDisplayIndices] = useState<number[]>([]);
+  const filesRef = useRef(files);
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
 
   useEffect(() => {
     const index = current;
@@ -114,7 +119,7 @@ function Content<T extends FileData, U = unknown>(props: ContentProps<T, U>) {
         case 'R':
           e.preventDefault();
           {
-            const file = files[index];
+            const file = filesRef.current[index];
             dispatch({
               type: 'CLEAR_IMAGE',
               payload: {
@@ -132,7 +137,7 @@ function Content<T extends FileData, U = unknown>(props: ContentProps<T, U>) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch, index, files]);
+  }, [dispatch, index]);
 
   return (
     <main className="flex-image-viewer-content" aria-label="图片内容">

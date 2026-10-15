@@ -437,7 +437,6 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
 
 .flex-image-viewer-info.visible {
   width: var(--fiv-size-info-panel-width);
-  width: auto;
   opacity: 1;
   visibility: visible;
 }

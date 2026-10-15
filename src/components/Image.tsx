@@ -349,7 +349,9 @@ function Image<T extends FileData, U = unknown>(props: ImageProps<T, U>) {
     setIsLoaded(true);
     setHasError(false);
     const img = internalImgRef.current;
-    if (img && img.naturalWidth && img.naturalHeight) {
+    // 仅在未提供 resolveFile 时，从实际加载的图片中获取尺寸元数据
+    // 避免与 useImageSource 中 resolveFile 返回的元数据重复触发
+    if (img && img.naturalWidth && img.naturalHeight && !resolveFile) {
       onMetaResolved?.({
         width: img.naturalWidth,
         height: img.naturalHeight,

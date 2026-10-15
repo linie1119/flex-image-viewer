@@ -4,7 +4,7 @@ import BaseActions from './BaseActions';
 import Image from './Image';
 import Modal from './Modal';
 import PercentSelect from './PercentSelect';
-import ThumbnailIamge from './ThumbnailIamge';
+import ThumbnailImage from './ThumbnailImage';
 
 import type { IconProps } from './Icon';
 import type { ActionItemProps } from './ActionItem';
@@ -12,7 +12,7 @@ import type { BaseActionsProps, BaseActionItem } from './BaseActions';
 import type { ImageProps } from './Image';
 import type { ModalProps } from './Modal';
 import type { PercentSelectProps } from './PercentSelect';
-import type { ThumbnailImageProps } from './ThumbnailIamge';
+import type { ThumbnailImageProps } from './ThumbnailImage';
 
 export {
   Icon,
@@ -28,6 +28,6 @@ export {
   ModalProps,
   PercentSelect,
   PercentSelectProps,
-  ThumbnailIamge,
+  ThumbnailImage,
   ThumbnailImageProps,
 };
