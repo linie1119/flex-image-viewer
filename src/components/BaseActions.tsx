@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Slider from 'rc-slider';
-import { useCreation } from 'ahooks';
 
 import { Icon, PercentSelect } from '@/components';
+import { MAX_SCALE } from '@/utils/constant';
 import { TOOLTIP_CONFIG } from '@/utils/dict';
 
 import type { TooltipKey } from '@/utils/dict';
@@ -11,16 +11,28 @@ import type { TooltipKey } from '@/utils/dict';
 import ActionItem from './ActionItem';
 import { getScaleValue, getSliderValue } from './PercentSelect';
 
-type ActionType = 'icon' | 'slider' | 'select';
-
-export interface BaseActionItem {
-  key: string;
-  type: ActionType;
-  tooltipKey?: TooltipKey;
-  iconName?: string;
-  tooltipPlacement?: 'topRight' | 'bottomRight' | 'topLeft' | 'bottomLeft';
-  valueKey?: string;
-}
+export type BaseActionItem<C extends Record<string, unknown> = Record<string, unknown>> =
+  | {
+      key: string;
+      type: 'icon';
+      iconName: string;
+      tooltipKey?: TooltipKey;
+      tooltipPlacement?: 'topRight' | 'bottomRight' | 'topLeft' | 'bottomLeft';
+    }
+  | {
+      key: string;
+      type: 'slider';
+      valueKey: keyof C;
+      tooltipKey?: TooltipKey;
+      tooltipPlacement?: 'topRight' | 'bottomRight' | 'topLeft' | 'bottomLeft';
+    }
+  | {
+      key: string;
+      type: 'select';
+      valueKey: keyof C;
+      tooltipKey?: TooltipKey;
+      tooltipPlacement?: 'topRight' | 'bottomRight' | 'topLeft' | 'bottomLeft';
+    };
 
 export interface BaseActionsProps<C extends Record<string, unknown> = Record<string, unknown>> {
   items: BaseActionItem[];
@@ -34,19 +46,18 @@ export default function BaseActions<C extends Record<string, unknown> = Record<s
 ) {
   const { items, contextValues, onAction, renderAction } = props;
 
-  const actionElements = useCreation(() => {
-    const elementsMap: Record<string, React.ReactNode> = {};
+  const actionElements: Record<string, React.ReactNode> = {};
 
-    items.forEach((item) => {
-      const { key, type, tooltipKey, iconName, valueKey } = item;
+  items.forEach((item) => {
+    const { key, type } = item;
 
-      let content: React.ReactNode = null;
+    let content: React.ReactNode = null;
 
-      if (type === 'slider') {
-        if (!valueKey) return;
-        const value = contextValues[valueKey];
+    if (type === 'slider') {
+      const value = contextValues[item.valueKey];
 
-        content = (
+      content = (
+        <span className="flex-image-viewer-action-slider">
           <Slider
             value={getSliderValue(value as number)}
             onChange={(val) => {
@@ -55,46 +66,47 @@ export default function BaseActions<C extends Record<string, unknown> = Record<s
               }
             }}
             min={getSliderValue(10)}
-            style={{ width: 100, position: 'relative', top: 6 }}
+            max={getSliderValue(MAX_SCALE * 100)}
           />
-        );
-      } else if (type === 'select') {
-        if (!valueKey) return;
-        const value = contextValues[valueKey];
-        content = <PercentSelect value={value as number} onChange={(val) => onAction(key, val)} />;
-      } else {
-        const handleClick = (e: React.MouseEvent) => {
-          onAction(key, undefined, e);
-        };
+        </span>
+      );
+    } else if (type === 'select') {
+      const value = contextValues[item.valueKey];
+      content = <PercentSelect value={value as number} onChange={(val) => onAction(key, val)} />;
+    } else {
+      const handleClick = (e: React.MouseEvent) => {
+        onAction(key, undefined, e);
+      };
 
-        const ariaLabel = tooltipKey ? TOOLTIP_CONFIG[tooltipKey] || tooltipKey : key;
-        content = (
-          <Icon name={iconName || key} onClick={handleClick} key={key} aria-label={ariaLabel} />
-        );
-      }
+      const ariaLabel = item.tooltipKey ? TOOLTIP_CONFIG[item.tooltipKey] || item.tooltipKey : key;
+      content = <Icon name={item.iconName} onClick={handleClick} aria-label={ariaLabel} />;
+    }
 
-      elementsMap[key] = content;
-    });
+    actionElements[key] = content;
+  });
 
-    return elementsMap;
-  }, [items, contextValues, onAction]);
+  if (renderAction) {
+    return (
+      <ul className="flex-image-viewer-actions">{renderAction(actionElements, contextValues)}</ul>
+    );
+  }
+
+  const itemMap = new Map(items.map((item) => [item.key, item]));
 
   return (
     <ul className="flex-image-viewer-actions">
-      {renderAction
-        ? renderAction(actionElements, contextValues)
-        : Object.keys(actionElements).map((key) => {
-            const item = items.find((i) => i.key === key);
-            return (
-              <ActionItem
-                key={key}
-                tooltip={item?.tooltipKey ? TOOLTIP_CONFIG[item.tooltipKey] : undefined}
-                tooltipPlacement={item?.tooltipPlacement}
-              >
-                {actionElements[key]}
-              </ActionItem>
-            );
-          })}
+      {Object.keys(actionElements).map((key) => {
+        const item = itemMap.get(key);
+        return (
+          <ActionItem
+            key={key}
+            tooltip={item?.tooltipKey ? TOOLTIP_CONFIG[item.tooltipKey] : undefined}
+            tooltipPlacement={item?.tooltipPlacement}
+          >
+            {actionElements[key]}
+          </ActionItem>
+        );
+      })}
     </ul>
   );
 }

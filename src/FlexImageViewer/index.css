@@ -412,6 +412,13 @@ div.flex-image-viewer-percent-select-check .flex-image-viewer-percent-select-che
   color: var(--fiv-color-text-inverse);
 }
 
+.flex-image-viewer-action-slider {
+  display: inline-block;
+  width: 100px;
+  position: relative;
+  top: 6px;
+}
+
 .flex-image-viewer-info {
   background-color: var(--fiv-color-bg-panel);
   height: 100%;
