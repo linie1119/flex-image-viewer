@@ -19,6 +19,7 @@ interface DemoProps {
   wheelZoom?: boolean;
   dragPan?: boolean;
   disableRightClick?: boolean;
+  initialCurrent?: number;
 }
 
 type ViewMode = 'original' | 'preview' | 'annotation';
@@ -63,9 +64,10 @@ const Demo: React.FC<DemoProps> = ({
   wheelZoom = true,
   dragPan = true,
   disableRightClick = false,
+  initialCurrent = 0,
 }) => {
   const [visible, setVisible] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(initialCurrent);
   const [viewMode, setViewMode] = useState<ViewMode>('preview');
   const [viewportIndices, setViewportIndices] = useState<Set<number>>(new Set());
 
@@ -134,6 +136,11 @@ const Demo: React.FC<DemoProps> = ({
   return (
     <div>
       <button onClick={() => setVisible(true)}>打开 Modal</button>
+      {initialCurrent > 0 && (
+        <p>
+          此示例将直接打开第 {initialCurrent + 1} 张图片（索引 {initialCurrent}）
+        </p>
+      )}
       <p>提示：在图片区域滚动鼠标滚轮可进行缩放；放大后按住鼠标左键可拖拽查看</p>
       <p>当前模式：{viewMode}</p>
       <p>视口中的缩略图索引：{Array.from(viewportIndices).join(', ') || '无'}</p>
@@ -277,5 +284,15 @@ export const DisableRightClick: Story = {
     srcDelay: 0,
     thumbnailDelay: 0,
     disableRightClick: true,
+  },
+};
+
+export const OpenAtSpecificIndex: Story = {
+  args: {
+    fileCount: 100,
+    preload: false,
+    srcDelay: 0,
+    thumbnailDelay: 0,
+    initialCurrent: 34,
   },
 };

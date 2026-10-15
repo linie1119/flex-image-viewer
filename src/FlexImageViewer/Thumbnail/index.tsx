@@ -67,20 +67,20 @@ function Thumbnail<T extends FileData, U = unknown>(props: ThumbnailProps<T, U>)
   const [range, setRange] = useState({ start: 0, end: -1 });
   const visibleIndicesRef = useRef<Set<number>>(new Set());
 
-  const updateVisibleRange = useMemoizedFn(() => {
+  const updateVisibleRange = useMemoizedFn((overrideScrollLeft?: number) => {
     const el = scrollRef.current;
     if (!el || !visible || thumbnails.length === 0) return;
 
-    const scrollLeft = el.scrollLeft;
+    const scrollLeft = overrideScrollLeft ?? el.scrollLeft;
     const containerWidth = el.clientWidth;
 
     let visibleStart: number;
     let visibleEnd: number;
 
     if (containerWidth === 0) {
-      // 容器尚未获得尺寸，渲染默认范围避免死循环
-      visibleStart = 0;
-      visibleEnd = Math.min(thumbnails.length - 1, BUFFER_COUNT * 2);
+      // 容器尚未获得尺寸，以 current 为中心渲染默认范围，确保当前项可见
+      visibleStart = Math.max(0, current - BUFFER_COUNT);
+      visibleEnd = Math.min(thumbnails.length - 1, current + BUFFER_COUNT);
     } else {
       visibleStart = Math.max(0, Math.floor(scrollLeft / THUMBNAIL_ITEM_WIDTH));
       visibleEnd = Math.min(
@@ -116,41 +116,89 @@ function Thumbnail<T extends FileData, U = unknown>(props: ThumbnailProps<T, U>)
   useEffect(() => {
     if (!visible || thumbnails.length === 0) return;
 
+    const div = scrollRef.current;
+    if (!div) return;
+
     const doScroll = () => {
-      const div = scrollRef.current;
       if (!div) return;
-      const targetScrollLeft =
-        current * THUMBNAIL_ITEM_WIDTH - div.clientWidth / 2 + THUMBNAIL_ITEM_WIDTH / 2;
-      const maxScrollLeft = Math.max(0, thumbnails.length * THUMBNAIL_ITEM_WIDTH - div.clientWidth);
-      // 临时禁用 CSS smooth scroll，避免虚拟列表重新计算时动画被中断
+      const activeItem = div.querySelector(
+        '.flex-image-viewer-thumbnail-active'
+      ) as HTMLElement | null;
+      if (!activeItem) return;
+
+      const containerWidth = div.clientWidth;
+      const itemWidth = activeItem.offsetWidth;
+      const itemLeft = activeItem.offsetLeft;
+      const scrollLeft = div.scrollLeft;
+      const maxScrollLeft = Math.max(0, div.scrollWidth - containerWidth);
+
+      let targetScrollLeft: number | null = null;
+
+      if (itemLeft < scrollLeft) {
+        // 选中项在左侧外 → 滚动到左边缘对齐
+        targetScrollLeft = itemLeft;
+      } else if (itemLeft + itemWidth > scrollLeft + containerWidth) {
+        // 选中项在右侧外 → 滚动到右边缘对齐
+        targetScrollLeft = itemLeft + itemWidth - containerWidth;
+      }
+
+      // 已在视野内，不滚动
+      if (targetScrollLeft === null) {
+        updateVisibleRange();
+        return;
+      }
+
       const originalBehavior = div.style.scrollBehavior;
       div.style.scrollBehavior = 'auto';
       div.scrollLeft = Math.max(0, Math.min(targetScrollLeft, maxScrollLeft));
       div.style.scrollBehavior = originalBehavior;
+      updateVisibleRange();
     };
 
-    // 立即执行滚动 + 更新范围
-    doScroll();
-    updateVisibleRange();
+    // 先基于估算的目标 scrollLeft 更新范围，触发 React 渲染 current 项
+    const containerWidth = div.clientWidth;
+    const scrollLeft = div.scrollLeft;
+    const itemLeft = current * THUMBNAIL_ITEM_WIDTH;
+    const itemWidth = THUMBNAIL_ITEM_WIDTH;
 
-    // 缩略图面板展开有 CSS transition，transition 结束后再执行一次兜底
-    const el = scrollRef.current;
-    const nav = el?.closest('.flex-image-viewer-thumbnail');
-    if (nav) {
-      const handleTransitionEnd = () => {
-        doScroll();
-        updateVisibleRange();
-      };
-      nav.addEventListener('transitionend', handleTransitionEnd);
-      const timer = setTimeout(() => {
-        doScroll();
-        updateVisibleRange();
-      }, 500);
-      return () => {
-        nav.removeEventListener('transitionend', handleTransitionEnd);
-        clearTimeout(timer);
-      };
+    let estimatedScrollLeft = scrollLeft;
+    if (itemLeft < scrollLeft) {
+      estimatedScrollLeft = itemLeft;
+    } else if (itemLeft + itemWidth > scrollLeft + containerWidth) {
+      estimatedScrollLeft = itemLeft + itemWidth - containerWidth;
     }
+    updateVisibleRange(estimatedScrollLeft);
+
+    // 使用 MutationObserver 监听 DOM 变化，当 activeItem 出现在 DOM 中时立即滚动
+    let observer: MutationObserver | null = null;
+    const checkAndScroll = () => {
+      const activeItem = div.querySelector('.flex-image-viewer-thumbnail-active');
+      if (activeItem) {
+        observer?.disconnect();
+        doScroll();
+        return true;
+      }
+      return false;
+    };
+
+    // 如果 activeItem 已经存在（如第二次打开），直接滚动
+    if (!checkAndScroll()) {
+      observer = new MutationObserver(() => {
+        checkAndScroll();
+      });
+      observer.observe(div, { childList: true, subtree: true });
+    }
+
+    // 兜底：500ms 后强制滚动
+    const fallbackTimer = setTimeout(() => {
+      observer?.disconnect();
+      doScroll();
+    }, 500);
+
+    return () => {
+      observer?.disconnect();
+      clearTimeout(fallbackTimer);
+    };
   }, [visible, current, thumbnails.length, updateVisibleRange]);
 
   // 监听滚动和窗口大小变化
@@ -160,12 +208,15 @@ function Thumbnail<T extends FileData, U = unknown>(props: ThumbnailProps<T, U>)
 
     updateVisibleRange();
 
-    el.addEventListener('scroll', updateVisibleRange, { passive: true });
-    window.addEventListener('resize', updateVisibleRange);
+    const handleScroll = () => updateVisibleRange();
+    const handleResize = () => updateVisibleRange();
+
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      el.removeEventListener('scroll', updateVisibleRange);
-      window.removeEventListener('resize', updateVisibleRange);
+      el.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, [updateVisibleRange]);
 
@@ -174,9 +225,8 @@ function Thumbnail<T extends FileData, U = unknown>(props: ThumbnailProps<T, U>)
     const el = scrollRef.current;
     if (!el) return;
 
-    const observer = new ResizeObserver(() => {
-      updateVisibleRange();
-    });
+    const handleResize = () => updateVisibleRange();
+    const observer = new ResizeObserver(handleResize);
 
     observer.observe(el);
 
