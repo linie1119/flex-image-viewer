@@ -24,6 +24,18 @@ interface DemoProps {
 
 type ViewMode = 'original' | 'preview' | 'annotation';
 
+function generatePlaceholderSvg(
+  width: number,
+  height: number,
+  bgColor: string,
+  textColor: string,
+  text: string
+): string {
+  const fontSize = Math.max(12, Math.min(width, height) / 8);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#${bgColor}"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#${textColor}" font-family="sans-serif" font-size="${fontSize}">${text}</text></svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 function generateFiles(count: number): DemoFileData[] {
   return Array.from({ length: count }).map((_, index) => {
     const id = index + 1;
@@ -31,9 +43,15 @@ function generateFiles(count: number): DemoFileData[] {
     const h = Math.round(200 + Math.random() * 10 * 100);
     return {
       name: `${id}.png`,
-      src: `https://placehold.co/${w}x${h}/333/fff?text=${id}+Original`,
-      previewSrc: `https://placehold.co/${w}x${h}/666/fff?text=${id}+Preview`,
-      thumbnail: `https://placehold.co/${Math.round(w / 4)}x${Math.round(h / 4)}/999/fff?text=${id}`,
+      src: generatePlaceholderSvg(w, h, '333333', 'ffffff', `${id} Original`),
+      previewSrc: generatePlaceholderSvg(w, h, '666666', 'ffffff', `${id} Preview`),
+      thumbnail: generatePlaceholderSvg(
+        Math.round(w / 4),
+        Math.round(h / 4),
+        '999999',
+        'ffffff',
+        `${id}`
+      ),
       alt: `${id}.png`,
       width: w,
       height: h,
@@ -86,21 +104,12 @@ const Demo: React.FC<DemoProps> = ({
   };
 
   const handleEdit = (file: DemoFileData) => {
-    const annotationUrl = file.previewSrc
-      ?.replace('/666/', '/0f0/')
-      ?.replace('+Preview', '+Annotated');
-    if (annotationUrl) {
-      viewerRef.current?.getState().files;
-      // 通过 updateCurrentFile 保存标注图地址
-      // 实际场景中这里会打开编辑器，编辑完成后回调
-      setTimeout(() => {
-        viewerRef.current?.getState();
-        // 这里仅做演示，实际应通过 renderAction context 的 updateCurrentFile
-      }, 100);
-      alert(`模拟编辑完成，标注图地址：${annotationUrl}`);
-      return annotationUrl;
-    }
-    return undefined;
+    const w = typeof file.width === 'number' ? file.width : 800;
+    const h = typeof file.height === 'number' ? file.height : 600;
+    const id = file.name?.split('.')[0] || '1';
+    const annotationUrl = generatePlaceholderSvg(w, h, '00ff00', '000000', `${id} Annotated`);
+    console.log('模拟编辑完成，标注图地址：', annotationUrl);
+    return annotationUrl;
   };
 
   const handleThumbnailViewportChange = (visibleIndices: Set<number>) => {
