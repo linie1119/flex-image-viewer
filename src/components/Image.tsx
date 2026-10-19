@@ -81,6 +81,11 @@ function Image<T extends FileData, U = unknown>(props: ImageProps<T, U>) {
   useEffect(() => {
     setIsLoaded(false);
     setHasError(false);
+
+    const img = internalImgRef.current;
+    if (img?.complete && img.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
   }, [src]);
 
   useEffect(() => {
